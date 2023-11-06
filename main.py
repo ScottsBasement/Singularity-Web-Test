@@ -20,7 +20,7 @@ def get_bing_results(query, num_pages=1):
     return results
 
 def is_unblocked_game(url):
-    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev"]
+    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev", ".firebaseapp.com"]
     for domain in allowed_domains:
         if domain in url:
             return True
@@ -40,7 +40,7 @@ def save_to_file(games, output_file="outputs.txt"):
 
 if __name__ == "__main__":
     query = "unblocked games"
-    num_pages = 50
+    num_pages = 100
     results = get_bing_results(query, num_pages)
     unblocked_games = find_unblocked_games(results)
 
