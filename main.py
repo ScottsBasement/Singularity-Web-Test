@@ -27,7 +27,7 @@ def is_unblocked_game(url):
     return False
 
 def find_unblocked_games(results):
-    unblocked_games = set()  # Use a set to store unique URLs
+    unblocked_games = set()
     for result in results:
         if is_unblocked_game(result):
             unblocked_games.add(result)
@@ -40,7 +40,7 @@ def save_to_file(games, output_file="games.txt"):
 
 if __name__ == "__main__":
     query = "unblocked games"
-    num_pages = 3  # You can adjust the number of pages to scrape
+    num_pages = 150
     results = get_bing_results(query, num_pages)
     unblocked_games = find_unblocked_games(results)
 
