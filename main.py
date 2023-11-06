@@ -20,7 +20,6 @@ def get_bing_results(query, num_pages=1):
     return results
 
 def is_unblocked_game(url):
-    # Check if the URL is from .github.io, .vercel.app, .netlify.app, or .pages.dev
     allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev"]
     for domain in allowed_domains:
         if domain in url:
