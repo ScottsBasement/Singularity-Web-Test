@@ -19,10 +19,18 @@ def get_bing_results(query, num_pages=1):
                     results.append(href)
     return results
 
+def is_valid_proxy(url):
+    # Filter out URLs containing specific keywords like "github" and "docs"
+    keywords_to_exclude = ["github", "docs", "npmjs"]
+    for keyword in keywords_to_exclude:
+        if keyword in url:
+            return False
+    return True
+
 def find_ultraviolet_proxies(results):
     proxies = []
     for result in results:
-        if "ultraviolet" in result.lower():
+        if "ultraviolet" in result.lower() and is_valid_proxy(result):
             proxies.append(result)
     return proxies
 
@@ -39,6 +47,6 @@ if __name__ == "__main__":
 
     if ultraviolet_proxies:
         save_to_file(ultraviolet_proxies)
-        print(f"{len(ultraviolet_proxies)} ultraviolet proxies found and saved to outputs.txt.")
+        print(f"{len(ultraviolet_proxies)} valid ultraviolet proxies found and saved to outputs.txt.")
     else:
-        print("No ultraviolet proxies found.")
+        print("No valid ultraviolet proxies found.")
