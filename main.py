@@ -1,11 +1,10 @@
 import requests
 from bs4 import BeautifulSoup
-import time
 
-def get_google_results(query, num_pages=1):
+def get_bing_results(query, num_pages=1):
     results = set()
     for page in range(1, num_pages + 1):
-        url = f"https://www.google.com/search?q={query}&start={10 * (page - 1)}"
+        url = f"https://www.bing.com/search?q={query}&first={10 * (page - 1)}"
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
         }
@@ -42,16 +41,11 @@ def save_to_file(games, output_file="outputs.txt"):
 if __name__ == "__main__":
     query = "unblocked games"
     num_pages = 100
+    results = get_bing_results(query, num_pages)
+    unblocked_games = find_unblocked_games(results)
 
-    while True:
-        results = get_google_results(query, num_pages)
-        unblocked_games = find_unblocked_games(results)
-
-        if unblocked_games:
-            save_to_file(unblocked_games)
-            print(f"{len(unblocked_games)} Found!")
-
-        time.sleep(600)
-
-        print("Zzzz...")
-        time.sleep(300)
+    if unblocked_games:
+        save_to_file(unblocked_games)
+        print(f"{len(unblocked_games)} Found!")
+    else:
+        print("No Unblocked Games :(")
