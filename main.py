@@ -16,36 +16,36 @@ def get_bing_results(query, num_pages=1):
             for link in links:
                 href = link.get("href")
                 if href and href.startswith("http"):
-                    results.add(href)
+                    results.add(href) 
     return results
 
 def is_unblocked_game(url):
-    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev", ".firebaseapp.com"]
+    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev"]
     for domain in allowed_domains:
         if domain in url:
             return True
     return False
 
 def find_unblocked_games(results):
-    unblocked_games = set()
+    unblocked_games = set()  # Use a set to store unique URLs
     for result in results:
         if is_unblocked_game(result):
             unblocked_games.add(result)
     return unblocked_games
 
-def save_to_file(games, output_file="outputs.txt"):
+def save_to_file(games, output_file="games.txt"):
     with open(output_file, "w") as file:
         for game in games:
             file.write(game + "\n")
 
 if __name__ == "__main__":
     query = "unblocked games"
-    num_pages = 100
+    num_pages = 3  # You can adjust the number of pages to scrape
     results = get_bing_results(query, num_pages)
     unblocked_games = find_unblocked_games(results)
 
     if unblocked_games:
         save_to_file(unblocked_games)
-        print(f"{len(unblocked_games)} Found!")
+        print(f"{len(unblocked_games)} Found! See Them In Games.txt!!")
     else:
         print("No Unblocked Games :(")
