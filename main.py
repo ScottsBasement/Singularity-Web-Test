@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 def get_bing_results(query, num_pages=1):
-    results = []
+    results = set()
     for page in range(1, num_pages + 1):
         url = f"https://www.bing.com/search?q={query}&first={10 * (page - 1)}"
         headers = {
@@ -16,37 +16,37 @@ def get_bing_results(query, num_pages=1):
             for link in links:
                 href = link.get("href")
                 if href and href.startswith("http"):
-                    results.append(href)
+                    results.add(href)
     return results
 
-def is_valid_proxy(url):
-    # Filter out URLs containing specific keywords like "github" and "docs"
-    keywords_to_exclude = ["github", "docs", "npmjs"]
-    for keyword in keywords_to_exclude:
-        if keyword in url:
-            return False
-    return True
+def is_unblocked_game(url):
+    # Check if the URL is from .github.io, .vercel.app, .netlify.app, or .pages.dev
+    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev"]
+    for domain in allowed_domains:
+        if domain in url:
+            return True
+    return False
 
-def find_ultraviolet_proxies(results):
-    proxies = []
+def find_unblocked_games(results):
+    unblocked_games = set()
     for result in results:
-        if "ultraviolet" in result.lower() and is_valid_proxy(result):
-            proxies.append(result)
-    return proxies
+        if is_unblocked_game(result):
+            unblocked_games.add(result) 
+    return unblocked_games
 
-def save_to_file(proxies, output_file="outputs.txt"):
+def save_to_file(games, output_file="outputs.txt"):
     with open(output_file, "w") as file:
-        for proxy in proxies:
-            file.write(proxy + "\n")
+        for game in games:
+            file.write(game + "\n")
 
 if __name__ == "__main__":
-    query = "ultraviolet proxies"
-    num_pages = 3  # You can adjust the number of pages to scrape
+    query = "unblocked games"
+    num_pages = 50
     results = get_bing_results(query, num_pages)
-    ultraviolet_proxies = find_ultraviolet_proxies(results)
+    unblocked_games = find_unblocked_games(results)
 
-    if ultraviolet_proxies:
-        save_to_file(ultraviolet_proxies)
-        print(f"{len(ultraviolet_proxies)} valid ultraviolet proxies found and saved to outputs.txt.")
+    if unblocked_games:
+        save_to_file(unblocked_games)
+        print(f"{len(unblocked_games)} Found!")
     else:
-        print("No valid ultraviolet proxies found.")
+        print("No Unblocked Games :(")
