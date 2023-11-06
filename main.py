@@ -19,15 +19,12 @@ def get_bing_results(query, num_pages=1):
                     results.append(href)
     return results
 
-def check_ultraviolet_proxies(proxies):
-    verified_proxies = []
-    for proxy in proxies:
-        response = requests.get(proxy)
-        if response.status_code == 200:
-            page_content = response.text
-            if "ultraviolet" in page_content.lower():
-                verified_proxies.append(proxy)
-    return verified_proxies
+def find_ultraviolet_proxies(results):
+    proxies = []
+    for result in results:
+        if "ultraviolet" in result.lower():
+            proxies.append(result)
+    return proxies
 
 def save_to_file(proxies, output_file="outputs.txt"):
     with open(output_file, "w") as file:
@@ -36,12 +33,12 @@ def save_to_file(proxies, output_file="outputs.txt"):
 
 if __name__ == "__main__":
     query = "ultraviolet proxies"
-    num_pages = 10  # You can adjust the number of pages to scrape
+    num_pages = 3  # You can adjust the number of pages to scrape
     results = get_bing_results(query, num_pages)
-    verified_proxies = check_ultraviolet_proxies(results)
+    ultraviolet_proxies = find_ultraviolet_proxies(results)
 
-    if verified_proxies:
-        save_to_file(verified_proxies)
-        print(f"{len(verified_proxies)} ultraviolet proxies found and saved to outputs.txt.")
+    if ultraviolet_proxies:
+        save_to_file(ultraviolet_proxies)
+        print(f"{len(ultraviolet_proxies)} ultraviolet proxies found and saved to outputs.txt.")
     else:
         print("No ultraviolet proxies found.")
