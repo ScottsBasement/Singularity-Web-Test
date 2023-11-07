@@ -20,7 +20,7 @@ def get_bing_results(query, num_pages=1):
     return results
 
 def is_unblocked_game(url):
-    allowed_domains = [".github.io", ".firebaseapp.com", ".vercel.app", ".netlify.app", ".pages.dev"]
+    allowed_domains = [".github.io", ".firebaseapp.com", ".vercel.app", ".netlify.app", ".pages.dev", ".cyclic.app", ".web.app", ".workers.dev", ".csb.app"]
     for domain in allowed_domains:
         if domain in url:
             return domain  # Return the matched domain
