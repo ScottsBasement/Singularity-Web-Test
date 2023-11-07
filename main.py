@@ -16,36 +16,38 @@ def get_bing_results(query, num_pages=1):
             for link in links:
                 href = link.get("href")
                 if href and href.startswith("http"):
-                    results.add(href) 
+                    results.add(href)
     return results
 
 def is_unblocked_game(url):
-    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".pages.dev"]
+    allowed_domains = [".github.io", ".firebaseapp.com", ".vercel.app", ".netlify.app", ".pages.dev"]
     for domain in allowed_domains:
         if domain in url:
-            return True
-    return False
+            return domain  # Return the matched domain
+    return None
 
-def find_unblocked_games(results):
-    unblocked_games = set()
-    for result in results:
-        if is_unblocked_game(result):
-            unblocked_games.add(result)
-    return unblocked_games
-
-def save_to_file(games, output_file="games.txt"):
+def save_to_file(games, domain):
+    output_file = f"{domain}.txt"  # Create a separate file for each domain
     with open(output_file, "w") as file:
         for game in games:
             file.write(game + "\n")
 
 if __name__ == "__main__":
     query = "unblocked games"
-    num_pages = 150
+    num_pages = 100
     results = get_bing_results(query, num_pages)
-    unblocked_games = find_unblocked_games(results)
 
-    if unblocked_games:
-        save_to_file(unblocked_games)
-        print(f"{len(unblocked_games)} Found! See Them In Games.txt!!")
-    else:
+    domain_files = {}  # Create a dictionary to store links by domain
+    for url in results:
+        domain = is_unblocked_game(url)
+        if domain:
+            if domain not in domain_files:
+                domain_files[domain] = set()
+            domain_files[domain].add(url)
+
+    for domain, games in domain_files.items():
+        save_to_file(games, domain)
+        print(f"{len(games)} Found, Sorted To {domain}!!")
+
+    if not domain_files:
         print("No Unblocked Games :(")
