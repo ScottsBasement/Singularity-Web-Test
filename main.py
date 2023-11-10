@@ -1,9 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-import time
-
-def get_bing_results(query):
-    url = f"https://www.bing.com/search?q={query}"
+def get_bing_results(query, page_number):
+    url = f"https://www.bing.com/search?q={query}&first={page_number}"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
     }
@@ -26,22 +24,26 @@ def is_unblocked_game(url, allowed_domains):
 
     return None
 
-def save_to_file(games):
+def save_to_file(games, seen_links):
     if games:
         output_file = "outputs/games.txt"
         with open(output_file, "a") as file:
             for game in games:
-                file.write(game + "\n")
+                if game not in seen_links:
+                    seen_links.add(game)
+                    file.write(game + "\n")
 
 if __name__ == "__main__":
-    query = "unblocked games links"
+    query = "unblocked games links pages.dev"
+    allowed_domains = [".pages.dev"]
 
-    allowed_domains = [".github.io", ".vercel.app", ".netlify.app", ".firebaseapp.com", ".pages.dev", ".web.app"]
+    page_number = 0
+    seen_links = set()  # To keep track of seen links
 
-    while True: 
-        links = get_bing_results(query)
+    while True:
+        links = get_bing_results(query, page_number)
 
-        games = set() 
+        games = set()
 
         no_unblocked_games_found = True
 
@@ -51,13 +53,12 @@ if __name__ == "__main__":
                 domain = is_unblocked_game(href, allowed_domains)
                 if domain:
                     no_unblocked_games_found = False
-                    games.add(href) 
+                    games.add(href)
 
-        save_to_file(games) 
+        save_to_file(games, seen_links)
 
         if not no_unblocked_games_found:
             print(f"{len(games)} Found!")
+            page_number += 1
         else:
             print("No Unblocked Games :(")
-
-        time.sleep(1)
