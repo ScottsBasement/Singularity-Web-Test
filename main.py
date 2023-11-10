@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 def get_bing_results(query, page_number):
-    url = f"https://www.bing.com/search?q={query}&first={page_number}"
+    url = f"https://www.bing.com/search?q={query}&first={page_number}" # so bing is w
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
     }
@@ -26,7 +26,7 @@ def is_unblocked_game(url, allowed_domains):
 
 def save_to_file(games, seen_links):
     if games:
-        output_file = "outputs/games.txt"
+        output_file = "outputs/games.txt" # Where the fun happens
         with open(output_file, "a") as file:
             for game in games:
                 if game not in seen_links:
@@ -35,12 +35,12 @@ def save_to_file(games, seen_links):
 
 if __name__ == "__main__":
     query = "unblocked games links pages.dev"
-    allowed_domains = [".pages.dev"]
+    allowed_domains = [".pages.dev"] # Last One Standing
 
     page_number = 0
     seen_links = set()  # To keep track of seen links
 
-    while True:
+    while True: # OMG FOREVER LOOPS!!!
         links = get_bing_results(query, page_number)
 
         games = set()
@@ -59,6 +59,6 @@ if __name__ == "__main__":
 
         if not no_unblocked_games_found:
             print(f"{len(games)} Found!")
-            page_number += 1
+            page_number += 1 # So this basically automatically goes to the next page to scrape, w feature.
         else:
             print("No Unblocked Games :(")
